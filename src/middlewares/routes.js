@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { Database } from './database.js'
+import { buildRoutePath } from './ultis/build-route-path.js'
 
 const database = new Database()
 
@@ -7,17 +8,17 @@ const database = new Database()
 export const routes = [
     {
         method: 'GET',
-        path: '/task',
+        path: buildRoutePath('/task'),
         handle: (req, res) => {
-            
-            return res.end()
+
+            return res.end(task)
         }
             
     },
 
     {
         method: 'POST',
-        path: '/task',
+        path:buildRoutePath('/task'),
         handle: ( req, res ) => {
             const { title, description, completed_at } =  req.body
 
@@ -31,9 +32,40 @@ export const routes = [
 
             }
 
+            database.insert('tasks', task)
+
             return res.end(JSON.stringify(task))
         }
 
        
+    },
+
+    {
+        method: 'PUT',
+        path: buildRoutePath('/task/:id'),
+        handle: ( req, res ) => {
+            const {completed_at} = req.body
+            const { id } = req.params
+            database.update('tasks', id, {
+                completed_at ,
+                updated_at: String(new Date())
+            })
+
+            return res.writeHead(204).end()
+        }
+
+
+    },
+
+    {
+        method: 'DELETE',
+        path: buildRoutePath('/task/:id'),
+        handle: (req, res ) => {
+            const { id } = req.params
+
+            database.delete('tasks', id)
+
+            return res.writeHead(204).end()
+        }
     }
 ]
