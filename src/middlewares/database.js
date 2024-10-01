@@ -1,4 +1,6 @@
 import fs from 'node:fs/promises'
+import { title } from 'node:process'
+import { deserialize } from 'node:v8'
 
 const databasePath = new URL('../db.json', import.meta.url)
 
@@ -30,6 +32,19 @@ export class Database {
             this.#persist()
         } else {
             this.#database[table] = [data]
+            this.#persist()
+        }
+    }
+
+    update(table, id, title, description, updated_at){
+        const rowIndex = this.#database[table].findIndex( row => row.id === id)
+
+        if (rowIndex >-1){
+            this.#database[table][rowIndex].title = title
+            this.#database[table][rowIndex].description = description
+            this.#database[table][rowIndex].updated_at = updated_at
+           
+
             this.#persist()
         }
     }
