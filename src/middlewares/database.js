@@ -34,11 +34,12 @@ export class Database {
         }
     }
 
-    update(table, id, data){
+    patch(table, id){
         const rowIndex = this.#database[table].findIndex( row => row.id === id)
 
         if ( rowIndex > -1 ){
-            this.#database[table][rowIndex] = data
+            this.#database[table][rowIndex].completed_at = 'sim'
+            
             this.#persist()
         }
 

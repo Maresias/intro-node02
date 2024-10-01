@@ -41,15 +41,11 @@ export const routes = [
     },
 
     {
-        method: 'PUT',
-        path: buildRoutePath('/task/:id'),
+        method: 'PATCH',
+        path: buildRoutePath('/task/:id/complete'),
         handle: ( req, res ) => {
-            const {completed_at} = req.body
             const { id } = req.params
-            database.update('tasks', id, {
-                completed_at ,
-                updated_at: String(new Date())
-            })
+            database.patch('tasks', id )
 
             return res.writeHead(204).end()
         }
