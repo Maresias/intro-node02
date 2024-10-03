@@ -1,11 +1,20 @@
-import { parse } from "csv-parse";
-import fs from 'node:fs/promises'
+import assert from 'assert';
+import { parse } from 'csv-parse';
+import fs  from 'node:fs/promises' 
 
-const records = []
 
-fs.createReadStream('../../../tasks.csv')
-.pipe(
-    parse({
-        
+const fileData = '../../../tasks.csv'
+
+var csvData=[]
+fs.readFile(fileData).then()
+    .parse({delimiter: ':'})
+    .on('data', function(csvrow) {
+        console.log(csvrow);
+    
+        csvData.push(csvrow);        
     })
-)
+    .on('end',function() {
+      
+      console.log(csvData);
+    });
+
